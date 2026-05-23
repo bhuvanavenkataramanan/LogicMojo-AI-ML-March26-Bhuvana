@@ -1,0 +1,103 @@
+@startuml erd
+entity "customers" as e01 {
+*customer_id
+customer_unique_id: <<FK>>
+customer_zip_code_prefix: <<FK>>
+customer_city
+customer_state
+}
+
+entity "location" as e02 {
+*geolocation_zip_code_prefix
+*geolocation_lat
+*geolocation_lng
+geolocation_city
+geolocation_state
+}
+
+entity "order_item" as e03 {
+*order_id
+*order_item_id
+product_id: <<FK>>
+seller_id: <<FK>>
+shipping_limit_date
+price
+freight_value
+}
+
+entity "orders" as e04 {
+*order_id
+customer_id: <<FK>>
+order_status
+order_purchase_timestamp
+order_approved_at
+order_delivered_carrier_date
+order_delivered_customer_date
+order_estimated_delivery_date
+}
+
+entity "payments" as e05 {
+*order_id
+*payment_sequential
+payment_type
+payment_installments
+payment_value
+}
+
+entity "products" as e06 {
+*product_id
+product_category_name: <<FK>>
+product_name_lenght
+product_description_lenght
+product_photos_qty
+product_weight_g
+product_length_cm
+product_height_cm
+product_width_cm
+}
+
+entity "reviews" as e07 {
+*review_id
+*order_id: <<FK>>
+review_score
+review_comment_title
+review_comment_message
+review_creation_date
+review_answer_timestamp
+}
+
+entity "sellers" as e08 {
+*seller_id
+seller_zip_code_prefix: <<FK>>
+seller_city
+seller_state
+}
+
+entity "category_translation" as e09 {
+*product_category_name
+product_category_name_english
+}
+
+entity "location_clean" as e10 {
+*geolocation_zip_code_prefix
+geolocation_lat
+geolocation_lng
+geolocation_city
+geolocation_state
+}
+
+e01 }o--|| e02
+e01 }o--|| e10
+e04 }|--|| e01
+
+e03 }|--|| e04
+e03 }|--|| e06
+
+e04 ||--|| e05
+e06 ||--|| e09
+e07 }o--|| e04
+e03 ||--|| e08
+e08 }o--|| e02
+e08 }o--|| e10
+
+@enduml
